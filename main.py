@@ -14,9 +14,9 @@ intents.members = True
 client = discord.Client(intents=intents)
 bot = commands.Bot(command_prefix='|', description="Daj eno zgodlej")
 
-with open('config.json') as fh:
-    client.config = json.load(fh)
-    #client.run(client.config['token'])
+# with open('config.json') as fh:
+#     client.config =  json.load(fh)
+#     #client.run(os.environ['token'])
 
 
 @client.event
@@ -68,7 +68,7 @@ async def on_member_join(member):
 
 
 
-#client.run(client.config['token']) #for local
+#client.run(os.environ['token']) #for local
 
 client.run(os.environ['token']) ##for hosting
 
