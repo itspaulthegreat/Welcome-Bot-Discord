@@ -6,11 +6,19 @@ import re
 import os
 from discord.utils import get
 import json
+from discord.ext import commands
 
 intents = discord.Intents.default()
 intents.members = True
 
 client = discord.Client(intents=intents)
+bot = commands.Bot(command_prefix='|', description="Daj eno zgodlej")
+
+with open('config.json') as fh:
+    client.config = json.load(fh)
+    #client.run(client.config['token'])
+
+
 @client.event
 async def on_ready():
     print('Welcome message bot Logged in')
@@ -20,6 +28,7 @@ async def on_ready():
 
 newUserMessage = """your messages"""
 
+
 @client.event
 async def on_member_join(member):
     print("inside onmember oin function")
@@ -27,17 +36,37 @@ async def on_member_join(member):
         role = get(member.guild.roles, name="BOTS")
         await member.add_roles(role)
     elif member.bot == False:
+        
         await member.send("Welcome!We hope you have a great day here.")
         channel = client.get_channel(808012829285154886)
-        # await channel.edit(name = 'Member count: {}'.format(channel.guild.member_count()))
+        
+       
         await channel.send(f"EveryOne Please welcome {member.mention}. We hope you have a great day here.")
         role = get(member.guild.roles, name="Members")
         await member.add_roles(role)
+
+   
+        
+    guild =  client.get_guild(807120796051832862) #get guild or discord server name
+
+    memberchannel = client.get_channel(client.config['MemberChannelID'])
+    botchannel = client.get_channel(client.config['BotChannelID'])
+
+    membercount = [mem for mem in guild.members if not mem.bot]
+    botcount = [mem for mem in guild.members if mem.bot]
+    await memberchannel.edit(name = '📈Member count: {}'.format(len(membercount))) #member count
+    await botchannel.edit(name = '📈Bot count: {}'.format(len(botcount))) #bot count
+
+        
+  
+      
+    
+# @loop(seconds=10)
+# async def serverstats(ctx):
     
 
-with open('config.json') as fh:
-    client.config = json.load(fh)
-    #client.run(client.config['token'])
+
+
 
 client.run(client.config['token']) #for local
 
