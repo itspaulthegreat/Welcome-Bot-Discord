@@ -38,7 +38,7 @@ async def on_member_join(member):
     elif member.bot == False:
         
         await member.send("Welcome!We hope you have a great day here.")
-        channel = client.get_channel(808012829285154886)
+        channel = client.get_channel(client.config['MessageChannelID'])
         
        
         await channel.send(f"EveryOne Please welcome {member.mention}. We hope you have a great day here.")
@@ -47,7 +47,7 @@ async def on_member_join(member):
 
    
         
-    guild =  client.get_guild(807120796051832862) #get guild or discord server name
+    guild =  client.get_guild(client.config['GuildID']) #get guild or discord server name
 
     memberchannel = client.get_channel(client.config['MemberChannelID'])
     botchannel = client.get_channel(client.config['BotChannelID'])
@@ -68,10 +68,9 @@ async def on_member_join(member):
 
 
 
-client.run(client.config['token']) #for local
+#client.run(client.config['token']) #for local
 
-
-#client.run(os.environ['token']) ##for hosting
+client.run(os.environ['token']) ##for hosting
 
 
 
