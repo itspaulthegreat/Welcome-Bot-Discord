@@ -14,9 +14,9 @@ intents.members = True
 client = discord.Client(intents=intents)
 bot = commands.Bot(command_prefix='|', description="Daj eno zgodlej")
 
-# with open('config.json') as fh:
-#     client.config =  json.load(fh)
-#     #client.run(os.environ['token'])
+with open('config.json') as fh:
+    client.config = json.load(fh)
+    #client.run(client.config['token'])
 
 
 @client.event
@@ -38,7 +38,7 @@ async def on_member_join(member):
     elif member.bot == False:
         
         await member.send("Welcome!We hope you have a great day here.")
-        channel = client.get_channel(os.environ['MessageChannelID'])
+        channel = client.get_channel(808012829285154886)
         
        
         await channel.send(f"EveryOne Please welcome {member.mention}. We hope you have a great day here.")
@@ -47,10 +47,10 @@ async def on_member_join(member):
 
    
         
-    guild =  client.get_guild(os.environ['GuildID']) #get guild or discord server name
+    guild =  client.get_guild(807120796051832862) #get guild or discord server name
 
-    memberchannel = client.get_channel(os.environ['MemberChannelID'])
-    botchannel = client.get_channel(os.environ['BotChannelID'])
+    memberchannel = client.get_channel(808082031456026665)
+    botchannel = client.get_channel(808082696189247488)
 
     membercount = [mem for mem in guild.members if not mem.bot]
     botcount = [mem for mem in guild.members if mem.bot]
@@ -68,9 +68,9 @@ async def on_member_join(member):
 
 
 
-#client.run(os.environ['token']) #for local
+client.run(client.config['token']) #for local
 
-client.run(os.environ['token']) ##for hosting
+# client.run(os.environ['token']) ##for hosting
 
 
 
