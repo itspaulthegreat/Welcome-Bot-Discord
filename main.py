@@ -8,20 +8,20 @@ from discord.utils import get
 import json
 from discord.ext import commands
 
-
 intents = discord.Intents.default()
 intents.members = True
 
 client = discord.Client(intents=intents)
 bot = commands.Bot(command_prefix='~', description="I am DevCord")
 
-# with open('config.json') as fh:
-#     client.config = json.load(fh)
-#     #client.run(client.config['token'])
-
+with open('config.json') as fh:
+    client.config = json.load(fh)
+    #client.run(client.config['token'])
 
 @client.event
 async def on_ready():
+    activity = discord.Game(name="Hi I am Your Moderator")
+    await client.change_presence(status=discord.Status.idle, activity=activity)
     print('Welcome message bot Logged in')
     print(client.user.name)
     print(client.user.id)
@@ -99,9 +99,9 @@ async def on_member_remove(member):
 
 
 
-#client.run(client.config['token']) #for local
+client.run(client.config['token']) #for local
 
-client.run(os.environ['token']) ##for hosting
+#client.run(os.environ['token']) ##for hosting
 
 
 
