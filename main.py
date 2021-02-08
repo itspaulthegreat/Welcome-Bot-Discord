@@ -31,10 +31,24 @@ newUserMessage = """your messages"""
 
 @client.event
 async def on_member_join(member):
-    print("inside onmember oin function")
+    print("inside onmember in function")
+    guild =  client.get_guild(807120796051832862) #get guild or discord server name
+
+    membercount = [mem for mem in guild.members if not mem.bot]
+    botcount = [mem for mem in guild.members if mem.bot]
+    
+    category = client.get_channel(808344068656070666)
+    
+    for channel in category.voice_channels:
+        await channel.delete()
+   
+    await guild.create_voice_channel(f"📈Member count:{len(membercount)}",overwrites=None,category=category,reason = None)
+    await guild.create_voice_channel(f"📊Bot count:{len(botcount)}",overwrites=None,category=category,reason = None)
+
     if member.bot == True:
         role = get(member.guild.roles, name="BOTS")
         await member.add_roles(role)
+       
     elif member.bot == False:
         
         await member.send("Welcome!We hope you have a great day here.")
@@ -44,39 +58,36 @@ async def on_member_join(member):
         await channel.send(f"EveryOne Please welcome {member.mention}. We hope you have a great day here.")
         role = get(member.guild.roles, name="Members")
         await member.add_roles(role)
+        
+        
 
    
-        
-    guild =  client.get_guild(807120796051832862) #get guild or discord server name
-
-    memberchannel = client.get_channel(808082031456026665)
-    botchannel = client.get_channel(808082696189247488)
-
-    membercount = [mem for mem in guild.members if not mem.bot]
-    botcount = [mem for mem in guild.members if mem.bot]
-    await memberchannel.edit(name = '📈Member count: {}'.format(len(membercount))) #member count
-    await botchannel.edit(name = '📈Bot count: {}'.format(len(botcount))) #bot count
+    
 
 @client.event       
 async def on_member_remove(member):
-    print("inside onmember oin function")
+    print("inside onmember leave function")
+    guild =  client.get_guild(807120796051832862) #get guild or discord server name
+
+    membercount = [mem for mem in guild.members if not mem.bot]
+    botcount = [mem for mem in guild.members if mem.bot]
+
+    category = client.get_channel(808344068656070666)
+
+    for channel in category.voice_channels:
+        await channel.delete()
+    await guild.create_voice_channel(f"📉Member count:{len(membercount)}",overwrites=None,category=category,reason = None)
+    await guild.create_voice_channel(f"📊Bot count:{len(botcount)}",overwrites=None,category=category,reason = None)
+   
     if member.bot == False:
         
         channel = client.get_channel(808094758244581438)
         
        
         await channel.send(f"Bye Bye {member.mention}. We hope you stay well.")
-   
         
-    guild =  client.get_guild(807120796051832862) #get guild or discord server name
-
-    memberchannel = client.get_channel(808082031456026665)
-    botchannel = client.get_channel(808082696189247488)
-
-    membercount = [mem for mem in guild.members if not mem.bot]
-    botcount = [mem for mem in guild.members if mem.bot]
-    await memberchannel.edit(name = '📈Member count: {}'.format(len(membercount))) #member count
-    await botchannel.edit(name = '📈Bot count: {}'.format(len(botcount))) #bot count
+        
+  
   
       
     
