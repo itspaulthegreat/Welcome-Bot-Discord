@@ -75,8 +75,8 @@ async def on_member_remove(member):
 
     membercount = [mem for mem in guild.members if not mem.bot]
     botcount = [mem for mem in guild.members if mem.bot]
-    await memberchannel.edit(name = '📈Member count: {}'.format(len(membercount))) #member count
-    await botchannel.edit(name = '📈Bot count: {}'.format(len(botcount))) #bot count
+    await memberchannel.edit(name = '📉Member count: {}'.format(len(membercount))) #member count
+    await botchannel.edit(name = '📉Bot count: {}'.format(len(botcount))) #bot count
   
       
     
