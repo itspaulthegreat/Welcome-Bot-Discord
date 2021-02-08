@@ -8,11 +8,12 @@ from discord.utils import get
 import json
 from discord.ext import commands
 
+
 intents = discord.Intents.default()
 intents.members = True
 
 client = discord.Client(intents=intents)
-bot = commands.Bot(command_prefix='|', description="Daj eno zgodlej")
+bot = commands.Bot(command_prefix='~', description="I am DevCord")
 
 # with open('config.json') as fh:
 #     client.config = json.load(fh)
