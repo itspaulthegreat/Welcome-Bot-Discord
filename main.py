@@ -33,12 +33,10 @@ newUserMessage = """your messages"""
 async def on_member_join(member):
     print("inside onmember oin function")
     if member.bot == True:
-        botimg = '📈'
         role = get(member.guild.roles, name="BOTS")
         await member.add_roles(role)
-        
     elif member.bot == False:
-        memimg = '📈'
+        
         await member.send("Welcome!We hope you have a great day here.")
         channel = client.get_channel(808012829285154886)
         
@@ -56,17 +54,14 @@ async def on_member_join(member):
 
     membercount = [mem for mem in guild.members if not mem.bot]
     botcount = [mem for mem in guild.members if mem.bot]
-    await memberchannel.edit(name = memimg + 'Member count: {}'.format(len(membercount))) #member count
-    await botchannel.edit(name = botimg + 'Bot count: {}'.format(len(botcount))) #bot count
+    await memberchannel.edit(name = '📈Member count: {}'.format(len(membercount))) #member count
+    await botchannel.edit(name = '📈Bot count: {}'.format(len(botcount))) #bot count
 
 @client.event       
 async def on_member_remove(member):
     print("inside onmember oin function")
-    if member.bot == True:
-        botimg = '📉'
-    elif member.bot == False:
-        memimg = '📉'
-
+    if member.bot == False:
+        
         channel = client.get_channel(808094758244581438)
         
        
@@ -80,8 +75,8 @@ async def on_member_remove(member):
 
     membercount = [mem for mem in guild.members if not mem.bot]
     botcount = [mem for mem in guild.members if mem.bot]
-    await memberchannel.edit(name = memimg + 'Member count: {}'.format(len(membercount))) #member count
-    await botchannel.edit(name = botimg +'Bot count: {}'.format(len(botcount))) #bot count
+    await memberchannel.edit(name = '📈Member count: {}'.format(len(membercount))) #member count
+    await botchannel.edit(name = '📈Bot count: {}'.format(len(botcount))) #bot count
   
       
     
