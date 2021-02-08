@@ -14,9 +14,9 @@ intents.members = True
 client = discord.Client(intents=intents)
 bot = commands.Bot(command_prefix='|', description="Daj eno zgodlej")
 
-# with open('config.json') as fh:
-#     client.config = json.load(fh)
-#     #client.run(client.config['token'])
+with open('config.json') as fh:
+    client.config = json.load(fh)
+    #client.run(client.config['token'])
 
 
 @client.event
@@ -33,10 +33,12 @@ newUserMessage = """your messages"""
 async def on_member_join(member):
     print("inside onmember oin function")
     if member.bot == True:
+        botimg = '📈'
         role = get(member.guild.roles, name="BOTS")
         await member.add_roles(role)
-    elif member.bot == False:
         
+    elif member.bot == False:
+        memimg = '📈'
         await member.send("Welcome!We hope you have a great day here.")
         channel = client.get_channel(808012829285154886)
         
@@ -54,14 +56,17 @@ async def on_member_join(member):
 
     membercount = [mem for mem in guild.members if not mem.bot]
     botcount = [mem for mem in guild.members if mem.bot]
-    await memberchannel.edit(name = '📈Member count: {}'.format(len(membercount))) #member count
-    await botchannel.edit(name = '📈Bot count: {}'.format(len(botcount))) #bot count
+    await memberchannel.edit(name = memimg + 'Member count: {}'.format(len(membercount))) #member count
+    await botchannel.edit(name = botimg + 'Bot count: {}'.format(len(botcount))) #bot count
 
 @client.event       
 async def on_member_remove(member):
     print("inside onmember oin function")
-    if member.bot == False:
-        
+    if member.bot == True:
+        botimg = '📉'
+    elif member.bot == False:
+        memimg = '📉'
+
         channel = client.get_channel(808094758244581438)
         
        
@@ -75,8 +80,8 @@ async def on_member_remove(member):
 
     membercount = [mem for mem in guild.members if not mem.bot]
     botcount = [mem for mem in guild.members if mem.bot]
-    await memberchannel.edit(name = '📉Member count: {}'.format(len(membercount))) #member count
-    await botchannel.edit(name = '📉Bot count: {}'.format(len(botcount))) #bot count
+    await memberchannel.edit(name = memimg + 'Member count: {}'.format(len(membercount))) #member count
+    await botchannel.edit(name = botimg +'Bot count: {}'.format(len(botcount))) #bot count
   
       
     
@@ -87,9 +92,9 @@ async def on_member_remove(member):
 
 
 
-#client.run(client.config['token']) #for local
+client.run(client.config['token']) #for local
 
-client.run(os.environ['token']) ##for hosting
+#client.run(os.environ['token']) ##for hosting
 
 
 
