@@ -14,11 +14,16 @@ intents = discord.Intents.default()
 intents.members = True
 
 # bot = discord.bot(intents=intents)
-bot = commands.Bot(command_prefix='~', description="I am DevCord",intents=intents)
+bot = commands.Bot(command_prefix='~', description="I am DevCord",intents=intents,case_insensitive = True)
 
 with open('config.json') as fh:
     bot.config = json.load(fh)
     #bot.run(bot.config['token'])
+
+
+
+
+#MODERATION BOT CODE
 
 @bot.event
 async def on_ready():
@@ -32,16 +37,17 @@ async def on_ready():
 newUserMessage = """your messages"""
 
 
-@bot.command(name='cmute', aliases=['cm'])
+@bot.command(name='cmute', aliases=['cm'],reason=True)
 @has_permissions(manage_messages=True)      # chat mute to users 
-async def cmute(ctx, member: discord.Member):
+async def cmute(ctx, member: discord.Member,*,arg):
+    cmreason = arg
     print("hi")
     # if ctx.message.channel.guild.me.guild_permissions.administrator:
     # if member.roles.has(809008966167167006):
     #     print("hi")
     role = discord.utils.get(member.guild.roles, name='ChatMuted')
-    await member.add_roles(role)
-    embed=discord.Embed(title="User Muted!", description="**{0}** was chat muted by **{1}**!".format(member, ctx.message.author), color=0xff00f6)
+    await member.remove_roles(role)
+    embed=discord.Embed(title="User Muted!", description="**{0}** was chat muted by **{1}** because **{2}**!".format(member, ctx.message.author,cmreason),color=0xff00f6)
     await ctx.send(embed=embed)
     # else:
     #     embed=discord.Embed(title="Permission Denied.", description="You don't have permission to use this command.", color=0xff00f6)
@@ -75,18 +81,19 @@ async def cunmute_error(ctx, error):
 
 
 @bot.command(name='vmute', aliases=['vm']) #mute voice for users
-@has_permissions(mute_members=True, administrator=True)
-async def vmute(ctx, member: discord.Member):
+@has_permissions(administrator= True)
+async def vmute(ctx, member: discord.Member,*,arg):
+    vmreason = arg
     role = discord.utils.get(member.guild.roles, name='VoiceMuted')
     await member.add_roles(role)
-    embed=discord.Embed(title="User Muted!", description="**{0}** was Voice muted by **{1}**!".format(member, ctx.message.author), color=0xff00f6)
+    embed=discord.Embed(title="User Muted!", description="**{0}** was Voice muted by **{1}** because **{2}**!".format(member, ctx.message.author,vmreason), color=0xff00f6)
     await ctx.send(embed=embed)
 
 @vmute.error
 async def vmute_error(ctx, error):
    print(error)
    if isinstance(error, MissingPermissions):
-       print("hello")
+       print(error)
        await ctx.send("**{}** ,You don't have permission to do that!".format(ctx.message.author))
 
 
@@ -110,6 +117,16 @@ async def vunmute_error(ctx, error):
 
 
 
+
+
+#END OF MODERATION
+
+
+
+
+
+
+#WELCOMER BOT CODE
 
 @bot.event
 async def on_member_join(member):
