@@ -7,7 +7,7 @@ import os
 from discord.utils import get
 import json
 from discord.ext import commands
-from discord.ext.commands import has_permissions
+from discord.ext.commands import has_permissions,CheckFailure, BadArgument
 from discord.ext.commands import MissingPermissions
 
 intents = discord.Intents.default()
@@ -16,9 +16,9 @@ intents.members = True
 # bot = discord.bot(intents=intents)
 bot = commands.Bot(command_prefix='~', description="I am DevCord",intents=intents,case_insensitive = True)
 
-# with open('config.json') as fh:
-#     bot.config = json.load(fh)
-#     #bot.run(bot.config['token'])
+with open('config.json') as fh:
+    bot.config = json.load(fh)
+    #bot.run(bot.config['token'])
 
 
 
@@ -41,6 +41,7 @@ newUserMessage = """your messages"""
 @has_permissions(manage_messages=True)      # chat mute to users 
 async def cmute(ctx, member: discord.Member,*,arg):
     cmreason = arg
+    await ctx.message.delete()
     print("hi")
     # if ctx.message.channel.guild.me.guild_permissions.administrator:
     # if member.roles.has(809008966167167006):
@@ -48,6 +49,7 @@ async def cmute(ctx, member: discord.Member,*,arg):
     role = discord.utils.get(member.guild.roles, name='ChatMuted')
     await member.remove_roles(role)
     embed=discord.Embed(title="User Muted!", description="**{0}** was chat muted by **{1}** because **{2}**!".format(member, ctx.message.author,cmreason),color=0xff00f6)
+    
     await ctx.send(embed=embed)
     # else:
     #     embed=discord.Embed(title="Permission Denied.", description="You don't have permission to use this command.", color=0xff00f6)
@@ -66,6 +68,7 @@ async def cmute_error(ctx, error):
 @bot.command(name='cunmute', aliases=['cunm']) #unmute chat for users.
 @has_permissions(manage_messages=True) 
 async def cunmute(ctx, member: discord.Member):
+    await ctx.message.delete()
     role = discord.utils.get(member.guild.roles, name='ChatMuted')
     await member.remove_roles(role)
     embed=discord.Embed(title="User UnMuted!",description="**{0}** was unmuted from chatting by **{1}**!".format(member, ctx.message.author), color=0xff00f6)
@@ -83,6 +86,7 @@ async def cunmute_error(ctx, error):
 @bot.command(name='vmute', aliases=['vm']) #mute voice for users
 @has_permissions(administrator= True)
 async def vmute(ctx, member: discord.Member,*,arg):
+    await ctx.message.delete()
     vmreason = arg
     role = discord.utils.get(member.guild.roles, name='VoiceMuted')
     await member.add_roles(role)
@@ -100,8 +104,9 @@ async def vmute_error(ctx, error):
 
 
 @bot.command(name='vunmute', aliases=['vunm']) #unmute voice for users
-@has_permissions(mute_members=True, administrator=True)
+@has_permissions(administrator=True)
 async def vunmute(ctx, member: discord.Member):
+    await ctx.message.delete()
     print("hi")
     role = discord.utils.get(member.guild.roles, name='VoiceMuted')
     await member.remove_roles(role)
@@ -111,6 +116,23 @@ async def vunmute(ctx, member: discord.Member):
 @vunmute.error
 async def vunmute_error(ctx, error):
    print(error)
+   if isinstance(error, MissingPermissions):
+       print("hello")
+       await ctx.send("**{}** ,You don't have permission to do that!".format(ctx.message.author))
+
+
+@bot.command(name='kick') #kick voice for users
+@has_permissions(kick_members= True)
+async def kick(ctx, member: discord.Member,*,arg):
+    await ctx.message.delete()
+    kickreason = arg
+    await member.kick(reason =kickreason )
+    embed=discord.Embed(title="User Muted!", description="**{0}** has been kicked by **{1}** because **{2}**!".format(member, ctx.message.author,kickreason), color=0xff00f6)
+    await ctx.send(embed=embed)
+
+@kick.error
+async def kick_error(ctx, error):
+   print("hello",error)
    if isinstance(error, MissingPermissions):
        print("hello")
        await ctx.send("**{}** ,You don't have permission to do that!".format(ctx.message.author))
@@ -184,11 +206,12 @@ async def on_member_remove(member):
         
        
         await channel.send(f"Bye Bye {member.mention}. We hope you stay well.")
-        
-        
-  
-  
-      
+
+
+
+
+
+
     
 # @loop(seconds=10)
 # async def serverstats(ctx):
@@ -198,9 +221,9 @@ async def on_member_remove(member):
 
 # bot.run(bot.config['token']) #for local
 
-# bot.run(bot.config['token'])
+bot.run(bot.config['token'])
 
-bot.run(os.environ['token']) ##for hosting
+#bot.run(os.environ['token']) ##for hosting
 
 
 
