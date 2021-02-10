@@ -16,9 +16,9 @@ intents.members = True
 # bot = discord.bot(intents=intents)
 bot = commands.Bot(command_prefix='~', description="I am DevCord",intents=intents,case_insensitive = True)
 
-# with open('config.json') as fh:
-#     bot.config = json.load(fh)
-#     #bot.run(bot.config['token'])
+with open('config.json') as fh:
+    bot.config = json.load(fh)
+    #bot.run(bot.config['token'])
 
 
 
@@ -47,7 +47,7 @@ async def cmute(ctx, member: discord.Member,*,arg):
     # if member.roles.has(809008966167167006):
     #     print("hi")
     role = discord.utils.get(member.guild.roles, name='ChatMuted')
-    await member.remove_roles(role)
+    await member.add_roles(role)
     embed=discord.Embed(title="User Muted!", description="**{0}** was chat muted by **{1}** because **{2}**!".format(member, ctx.message.author,cmreason),color=0xff00f6)
     
     await ctx.send(embed=embed)
@@ -132,11 +132,13 @@ async def kick(ctx, member: discord.Member,*,arg):
 
 @kick.error
 async def kick_error(ctx, error):
-   print("hello",error)
-   if isinstance(error, MissingPermissions):
-       print("hello")
-       await ctx.send("**{}** ,You don't have permission to do that!".format(ctx.message.author))
+    print("hello",error)
+    if isinstance(error, MissingPermissions):
+        print("hello")
+        await ctx.send("**{}** ,You don't have permission to do that!".format(ctx.message.author))
 
+    else:
+        await ctx.send("Error Kicking. Please check if you have entered correct arguments or you have right permissions.")
 
 
 
@@ -221,9 +223,9 @@ async def on_member_remove(member):
 
 # bot.run(bot.config['token']) #for local
 
-# bot.run(bot.config['token'])
+bot.run(bot.config['token'])
 
-bot.run(os.environ['token']) ##for hosting
+#bot.run(os.environ['token']) ##for hosting
 
 
 
