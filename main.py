@@ -249,7 +249,7 @@ async def on_member_remove(member):
 @has_permissions(administrator= True)
 async def gethelpticket(ctx):
     ch = bot.get_channel(809356256112017408)
-    if ctx.message.channel.id == 809356256112017408:
+    if ctx.message.channel.id == 809356256112017408 or ctx.message.channel.id == 809356256112017408:
         await ctx.message.delete()
         role = discord.utils.get(ctx.guild.roles, name='Moderator')
         embed=discord.Embed(title="Ticket raised ", description="**Hello Users ** \n To generate a new Ticket please use this channel only \n A new ticket can be raised by using  **~ticket reason** command. \n Type your reason after the command . \n As soon as a ticket has been raised a **{}** will resolve the issue. An example is shown below by an admin.".format(role.mention),color=0xff00f6)
@@ -291,8 +291,8 @@ async def on_message(ctx,*,arg):
         allticket = bot.get_channel(809370568297545759)
         allticketmsg = await allticket.send(embed =embed)
         raisedmsg = await ctx.send(embed=embed)
-        newembedallticket=discord.Embed(title="Ticket raised . **ID:{0}**".format(allticketmsg.id), description="**Hello {0}** A new ticket has been raised by **{1}** . \n **Issue** : **{2}**. \n Please type **~tickresol {3}** after resolvin the issue".format(role.mention,user.mention, arg,allticketmsg.id),color=0xff00f6)
-        newembedraisedticket=discord.Embed(title="Ticket raised . **ID:{0}**".format(allticketmsg.id), description="**Hello {0}** A new ticket has been raised by **{1}** . \n **Issue** : **{2}**. \n Thank you".format(role.mention,user.mention, arg),color=0xff00f6)
+        newembedallticket=discord.Embed(title="Ticket raised . **ID:{0}**".format(allticketmsg.id), description="**Hello {0}** A new ticket has been raised by **{1}** . \n **Issue** : **{2}**. \n Please type **~tickresol {3}** after resolvin the issue".format(role.mention,user.mention, arg,allticketmsg.id),color=0xfae593)
+        newembedraisedticket=discord.Embed(title="Ticket raised . **ID:{0}**".format(allticketmsg.id), description="**Hello {0}** A new ticket has been raised by **{1}** . \n **Issue** : **{2}**. \n Thank you".format(role.mention,user.mention, arg),color=0xaadff1)
         await allticketmsg.edit(embed = newembedallticket)
         await raisedmsg.edit(embed = newembedraisedticket)
     else:
@@ -303,6 +303,7 @@ async def on_message(ctx,*,arg):
 
 
 @bot.command(name='tickresol')    #ticker raise
+@has_permissions(kick_members=True,ban_members = True)
 async def resolve(ctx,msgid):
     ch = bot.get_channel(809370568297545759)
     if ctx.message.channel.id == 809370568297545759:
@@ -312,7 +313,7 @@ async def resolve(ctx,msgid):
         await msg.delete()
         user = bot.get_user(ctx.author.id)
         role = discord.utils.get(ctx.guild.roles, name='Moderator')
-        newembedallticket=discord.Embed(title="Ticket raised . **ID:{0}**".format(msgid), description="**The Ticket has been Resolved by **{0}** .".format(role.mention),color=0xff00f6)
+        newembedallticket=discord.Embed(title="Ticket raised . **ID:{0}**".format(msgid), description="**The Ticket has been Resolved by **{0}** .".format(role.mention),color=0xaaf1b9)
         resolvedticket = bot.get_channel(809371595051237416)
         await resolvedticket.send(embed =newembedallticket)
     else:
@@ -322,13 +323,24 @@ async def resolve(ctx,msgid):
         await ctx.send(embed=embed)
 
 
+@resolve.error
+async def resolve_error(ctx,error):
+    await ctx.message.delete()
+    print("fuck",type(error))
+    if isinstance(error,MissingPermissions):
+        await ctx.send("**{}** ,You don't have permission!".format(ctx.message.author))
+
+
+
+
+
 
 
 
 
 @bot.command(name='tickstatus')    #ticker raise
 async def tickstatus(ctx,msgid):
-    ctx.message.delete()
+    await ctx.message.delete()
     ch = bot.get_channel(809371578172440607)
     if ctx.message.channel.id == 809371578172440607:
 
@@ -337,9 +349,9 @@ async def tickstatus(ctx,msgid):
         msgid = int(msgid)
         user = bot.get_user(ctx.author.id)
         
-        inprogress = discord.Embed(title="Ticket is in progress. **ID:{0}**".format(msgid), description="Hello **{0}** \n **The Ticket is in progress** .".format(user.mention),color=0xff00f6)
-        done = discord.Embed(title="Ticket has been resolved . **ID:{0}**".format(msgid), description="Hello **{0}** \n **The Ticket has been Resolved**.".format(user.mention),color=0xff00f6)
-        notfound = discord.Embed(title="Ticket Not Found", description="Hello **{0}** \n **The Ticket is not present** . \n **Please check the ID you entered.**.".format(user.mention),color=0xff00f6)
+        inprogress = discord.Embed(title="Ticket is in progress. **ID:{0}**".format(msgid), description="Hello **{0}** \n **The Ticket is in progress** .".format(user.mention),color=0xfae593)
+        done = discord.Embed(title="Ticket has been resolved . **ID:{0}**".format(msgid), description="Hello **{0}** \n **The Ticket has been Resolved**.".format(user.mention),color=0xaaf1b9)
+        notfound = discord.Embed(title="Ticket Not Found", description="Hello **{0}** \n **The Ticket is not present** . \n **Please check the ID you entered.**.".format(user.mention),color=0xab2339)
         
         
         channel = bot.get_channel(809370568297545759)  #allticket channel
@@ -416,7 +428,7 @@ async def tickstatus(ctx,msgid):
 
 @tickstatus.error
 async def tickstatus_error(ctx,error):
-    ctx.message.delete()
+    await ctx.message.delete()
     print("fuck",error)
     if str(type(error))== "<class 'discord.ext.commands.errors.CommandInvokeError'>":
         await ctx.send("**{}** ,You have entered invalid Ticket ID!".format(ctx.message.author))
