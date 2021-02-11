@@ -280,9 +280,9 @@ async def gethelpticket(ctx):
 
 
 
-bot.run(bot.config['token']) #for local
+# bot.run(bot.config['token']) #for local
 
-# bot.run(bot.config['token'])
+# # bot.run(bot.config['token'])
 
 bot.run(os.environ['token']) ##for hosting
 
