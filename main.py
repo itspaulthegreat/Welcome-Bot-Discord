@@ -161,6 +161,29 @@ async def move_error(ctx, error):
         await ctx.send("Error moving. Please check if you have entered correct arguments or you have right permissions.")
 
 
+
+
+@bot.command(name='ticket')    #ticker raise
+async def on_message(ctx,*,arg):
+    ch = bot.get_channel(809356256112017408)
+    if ctx.message.channel.id == 809356256112017408:
+        
+        user = bot.get_user(ctx.author.id)
+        role = discord.utils.get(ctx.guild.roles, name='Moderator')
+        print(user,role)
+        embed=discord.Embed(title="Ticket raised ", description="**Hello {0}** A new ticket has been raised by **{1}** . \n **Issue** : **{2}**. \n Thank you.".format(role.mention,user.mention, arg),color=0xff00f6)
+        await ctx.send(embed=embed)
+    else:
+        await ctx.message.delete()
+        user = bot.get_user(ctx.author.id)
+        embed=discord.Embed(title="Ticket raised ", description="hello **{0}** . please raise your ticket in **{1}**  channel".format(user.mention,ch.mention),color=0xff00f6)
+        await ctx.send(embed=embed)
+
+
+
+
+
+
 #END OF MODERATION
 
 
@@ -237,9 +260,27 @@ async def on_member_remove(member):
 # async def serverstats(ctx):
     
 
+@bot.command(name='helpticket')    #ticker raise
+@has_permissions(administrator= True)
+async def gethelpticket(ctx):
+    ch = bot.get_channel(809356256112017408)
+    if ctx.message.channel.id == 809356256112017408:
+        await ctx.message.delete()
+        role = discord.utils.get(ctx.guild.roles, name='Moderator')
+        embed=discord.Embed(title="Ticket raised ", description="**Hello Users ** \n To generate a new Ticket please use this channel only \n A new ticket can be raised by using  **~ticket reason** command. \n Type your reason after the command . \n As soon as a ticket has been raised a **{}** will resolve the issue. An example is shown below by an admin.".format(role.mention),color=0xff00f6)
+        await ctx.send(embed=embed)
+    else:
+        await ctx.message.delete()
+        user = bot.get_user(ctx.author.id)
+        embed=discord.Embed(title="Ticket raised ", description="hello **{0}** . please raise your ticket in **{1}**  channel".format(user.mention,ch.mention),color=0xff00f6)
+        await ctx.send(embed=embed)
 
 
-# bot.run(bot.config['token']) #for local
+
+
+
+
+bot.run(bot.config['token']) #for local
 
 # bot.run(bot.config['token'])
 
