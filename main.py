@@ -7,7 +7,7 @@ import os
 from discord.utils import get
 import json
 from discord.ext import commands
-from discord.ext.commands import has_permissions,CheckFailure, BadArgument
+from discord.ext.commands import has_permissions,CheckFailure, BadArgument,has_guild_permissions
 from discord.ext.commands import MissingPermissions
 
 intents = discord.Intents.default()
@@ -16,9 +16,9 @@ intents.members = True
 # bot = discord.bot(intents=intents)
 bot = commands.Bot(command_prefix='~', description="I am DevCord",intents=intents,case_insensitive = True)
 
-# with open('config.json') as fh:
-#     bot.config = json.load(fh)
-#     #bot.run(bot.config['token'])
+with open('config.json') as fh:
+    bot.config = json.load(fh)
+    #bot.run(bot.config['token'])
 
 
 
@@ -142,6 +142,24 @@ async def kick_error(ctx, error):
 
 
 
+@bot.command(name='move') #kick voice for users
+@has_guild_permissions(move_members= True)
+async def move(ctx,channel : discord.VoiceChannel):
+    await ctx.message.delete()
+    # print(channel)
+    for members in ctx.author.voice.channel.members:
+        await members.move_to(channel)
+
+@move.error
+async def move_error(ctx, error):
+    print("hello",error)
+    if isinstance(error, MissingPermissions):
+        print("hello")
+        await ctx.send("**{}** ,You don't have permission to do that!".format(ctx.message.author))
+
+    else:
+        await ctx.send("Error moving. Please check if you have entered correct arguments or you have right permissions.")
+
 
 #END OF MODERATION
 
@@ -223,9 +241,9 @@ async def on_member_remove(member):
 
 # bot.run(bot.config['token']) #for local
 
-# bot.run(bot.config['token'])
+bot.run(bot.config['token'])
 
-bot.run(os.environ['token']) ##for hosting
+# bot.run(os.environ['token']) ##for hosting
 
 
 
