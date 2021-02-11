@@ -9,6 +9,7 @@ import json
 from discord.ext import commands
 from discord.ext.commands import has_permissions,CheckFailure, BadArgument,has_guild_permissions
 from discord.ext.commands import MissingPermissions
+from discord.errors import HTTPException
 
 intents = discord.Intents.default()
 intents.members = True
@@ -16,9 +17,9 @@ intents.members = True
 # bot = discord.bot(intents=intents)
 bot = commands.Bot(command_prefix='~', description="I am DevCord",intents=intents,case_insensitive = True)
 
-# with open('config.json') as fh:
-#     bot.config = json.load(fh)
-#     #bot.run(bot.config['token'])
+with open('config.json') as fh:
+    bot.config = json.load(fh)
+    #bot.run(bot.config['token'])
 
 
 
@@ -163,25 +164,6 @@ async def move_error(ctx, error):
 
 
 
-@bot.command(name='ticket')    #ticker raise
-async def on_message(ctx,*,arg):
-    ch = bot.get_channel(809356256112017408)
-    if ctx.message.channel.id == 809356256112017408:
-        
-        user = bot.get_user(ctx.author.id)
-        role = discord.utils.get(ctx.guild.roles, name='Moderator')
-        print(user,role)
-        embed=discord.Embed(title="Ticket raised ", description="**Hello {0}** A new ticket has been raised by **{1}** . \n **Issue** : **{2}**. \n Thank you.".format(role.mention,user.mention, arg),color=0xff00f6)
-        await ctx.send(embed=embed)
-    else:
-        await ctx.message.delete()
-        user = bot.get_user(ctx.author.id)
-        embed=discord.Embed(title="Ticket raised ", description="hello **{0}** . please raise your ticket in **{1}**  channel".format(user.mention,ch.mention),color=0xff00f6)
-        await ctx.send(embed=embed)
-
-
-
-
 
 
 #END OF MODERATION
@@ -280,11 +262,98 @@ async def gethelpticket(ctx):
 
 
 
+
+
+
+
+
+
+
+
+
+########## RAISING TICKETS MODERATION #####################
+
+
+
+
+
+@bot.command(name='ticket')    #ticker raise
+async def on_message(ctx,*,arg):
+    ch = bot.get_channel(809356256112017408)
+    if ctx.message.channel.id == 809356256112017408:
+        user = bot.get_user(ctx.author.id)
+        role = discord.utils.get(ctx.guild.roles, name='Moderator')
+        embed=discord.Embed(title="Ticket raised", description="**Hello {0}** A new ticket has been raised by **{1}** . \n **Issue** : **{2}**. \n Thank you.".format(role.mention,user.mention, arg),color=0xff00f6)
+        allticket = bot.get_channel(809370568297545759)
+        allticketmsg = await allticket.send(embed =embed)
+        raisedmsg = await ctx.send(embed=embed)
+        newembedallticket=discord.Embed(title="Ticket raised . **ID:{0}**".format(allticketmsg.id), description="**Hello {0}** A new ticket has been raised by **{1}** . \n **Issue** : **{2}**. \n Please type **~tickresol {3}** after resolvin the issue".format(role.mention,user.mention, arg,allticketmsg.id),color=0xff00f6)
+        newembedraisedticket=discord.Embed(title="Ticket raised . **ID:{0}**".format(allticketmsg.id), description="**Hello {0}** A new ticket has been raised by **{1}** . \n **Issue** : **{2}**. \n Thank you".format(role.mention,user.mention, arg),color=0xff00f6)
+        await allticketmsg.edit(embed = newembedallticket)
+        await raisedmsg.edit(embed = newembedraisedticket)
+    else:
+        await ctx.message.delete()
+        user = bot.get_user(ctx.author.id)
+        embed=discord.Embed(title="Ticket raised ", description="hello **{0}** . please raise your ticket in **{1}**  channel".format(user.mention,ch.mention),color=0xff00f6)
+        await ctx.send(embed=embed)
+
+
+@bot.command(name='tickresol')    #ticker raise
+async def resolve(ctx,msgid):
+    ch = bot.get_channel(809370568297545759)
+    if ctx.message.channel.id == 809370568297545759:
+        await ctx.message.delete()
+        channel = bot.get_channel(809370568297545759)
+        msg = await channel.fetch_message(msgid)
+        await msg.delete()
+        user = bot.get_user(ctx.author.id)
+        role = discord.utils.get(ctx.guild.roles, name='Moderator')
+        newembedallticket=discord.Embed(title="Ticket raised . **ID:{0}**".format(msgid), description="**The Ticket has been Resolved by **{0}** .".format(role.mention),color=0xff00f6)
+        resolvedticket = bot.get_channel(809371595051237416)
+        await resolvedticket.send(embed =newembedallticket)
+    else:
+        await ctx.message.delete()
+        user = bot.get_user(ctx.author.id)
+        embed=discord.Embed(title="Ticket raised ", description="hello **{0}** . please raise your ticket in **{1}**  channel".format(user.mention,ch.mention),color=0xff00f6)
+        await ctx.send(embed=embed)
+
+
+
+
+
+
+@bot.command(name='tickstatus')    #ticker raise
+async def tickstatus(ctx,msgid):
+    ch = bot.get_channel(809371578172440607)
+    if ctx.message.channel.id == 809371578172440607:
+        channel = bot.get_channel(809370568297545759)
+        msg = await channel.fetch_message(msgid)
+        print(msg)
+    else:
+        await ctx.message.delete()
+        user = bot.get_user(ctx.author.id)
+        embed=discord.Embed(title="Ticket raised ", description="hello **{0}** . please raise your ticket in **{1}**  channel".format(user.mention,ch.mention),color=0xff00f6)
+        await ctx.send(embed=embed)
+
+
+
+@tickstatus.error
+async def tickstatus_error(ctx, error):
+   print("fuck",error)
+   if isinstance(error,HTTPException):
+       print("hello")
+       #await ctx.send("**{}** ,You don't have permission to do that!".format(ctx.message.author))
+
+
+################# END ###########################################
+
+
+
 # bot.run(bot.config['token']) #for local
 
-# # bot.run(bot.config['token'])
+bot.run(bot.config['token'])
 
-bot.run(os.environ['token']) ##for hosting
+# bot.run(os.environ['token']) ##for hosting
 
 
 
