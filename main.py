@@ -17,9 +17,9 @@ intents.members = True
 # bot = discord.bot(intents=intents)
 bot = commands.Bot(command_prefix='~', description="I am DevCord",intents=intents,case_insensitive = True)
 
-with open('config.json') as fh:
-    bot.config = json.load(fh)
-    #bot.run(bot.config['token'])
+# with open('config.json') as fh:
+#     bot.config = json.load(fh)
+#     #bot.run(bot.config['token'])
 
 
 
@@ -163,6 +163,9 @@ async def move_error(ctx, error):
 
 
 
+@bot.command(name="clear")  #clearing
+async def clear(ctx,arg):
+    await ctx.channel.purge(limit=int(arg))
 
 
 
@@ -279,6 +282,7 @@ async def gethelpticket(ctx):
 
 @bot.command(name='ticket')    #ticker raise
 async def on_message(ctx,*,arg):
+    await ctx.message.delete()
     ch = bot.get_channel(809356256112017408)
     if ctx.message.channel.id == 809356256112017408:
         user = bot.get_user(ctx.author.id)
@@ -294,7 +298,7 @@ async def on_message(ctx,*,arg):
     else:
         await ctx.message.delete()
         user = bot.get_user(ctx.author.id)
-        embed=discord.Embed(title="Ticket raised ", description="hello **{0}** . please raise your ticket in **{1}**  channel".format(user.mention,ch.mention),color=0xff00f6)
+        embed=discord.Embed(title="Ticket not raised ", description="hello **{0}** . please raise your ticket in **{1}**  channel".format(user.mention,ch.mention),color=0xff00f6)
         await ctx.send(embed=embed)
 
 
@@ -314,7 +318,7 @@ async def resolve(ctx,msgid):
     else:
         await ctx.message.delete()
         user = bot.get_user(ctx.author.id)
-        embed=discord.Embed(title="Ticket raised ", description="hello **{0}** . please raise your ticket in **{1}**  channel".format(user.mention,ch.mention),color=0xff00f6)
+        embed=discord.Embed(title="Ticket not raised ", description="hello **{0}** . please raise your ticket in **{1}**  channel".format(user.mention,ch.mention),color=0xff00f6)
         await ctx.send(embed=embed)
 
 
@@ -324,25 +328,101 @@ async def resolve(ctx,msgid):
 
 @bot.command(name='tickstatus')    #ticker raise
 async def tickstatus(ctx,msgid):
+    ctx.message.delete()
     ch = bot.get_channel(809371578172440607)
     if ctx.message.channel.id == 809371578172440607:
-        channel = bot.get_channel(809370568297545759)
-        msg = await channel.fetch_message(msgid)
-        print(msg)
+
+        outputchannel = bot.get_channel(809371578172440607) #ticket status channel
+
+        msgid = int(msgid)
+        user = bot.get_user(ctx.author.id)
+        
+        inprogress = discord.Embed(title="Ticket is in progress. **ID:{0}**".format(msgid), description="Hello **{0}** \n **The Ticket is in progress** .".format(user.mention),color=0xff00f6)
+        done = discord.Embed(title="Ticket has been resolved . **ID:{0}**".format(msgid), description="Hello **{0}** \n **The Ticket has been Resolved**.".format(user.mention),color=0xff00f6)
+        notfound = discord.Embed(title="Ticket Not Found", description="Hello **{0}** \n **The Ticket is not present** . \n **Please check the ID you entered.**.".format(user.mention),color=0xff00f6)
+        
+        
+        channel = bot.get_channel(809370568297545759)  #allticket channel
+        messages = await channel.history(limit=200).flatten()
+        print("hi there",messages)
+        if messages !=[]:
+            list1 = []
+            for msg in messages:
+                for e in msg.embeds:
+                    listid = e.title.split(':')
+                    ticketid = listid[1].split('*')
+                    list1.append(int(ticketid[0]))
+                    print("list1",list1)
+            if msgid in list1:
+                print("hi")
+                await outputchannel.send(embed =inprogress)
+                return
+        
+            elif msgid not in list1:
+                print("hi there 2")
+                channel1 = bot.get_channel(809371595051237416)   #done channel
+                messages1 = await channel1.history(limit=200).flatten()
+                if messages1 != []:
+                    list2 = []
+                    for msg in messages1:
+                        for e in msg.embeds:
+                            listid1 = e.title.split(':')
+                            ticketid1 = listid1[1].split('*')
+                            
+                            list2.append(int(ticketid1[0]))
+                            print("list2",list2)
+                    if msgid in list2:
+                        await outputchannel.send(embed =done)
+                        return
+
+                    elif msgid not in list2:
+                        await outputchannel.send(embed =notfound)
+                        return
+
+                elif messages1 == []:
+                    await outputchannel.send(embed =notfound)
+
+
+        elif messages == []:       
+            channel1 = bot.get_channel(809371595051237416)
+            messages1 = await channel1.history(limit=200).flatten()
+            if messages1 != []:
+                list3 = []
+                for msg in messages1:
+                    for e in msg.embeds:
+                        listid1 = e.title.split(':')
+                        ticketid1 = listid1[1].split('*')
+                        list3.append(int(ticketid1[0]))
+                        print("list3",list3)
+                if msgid in list3:
+                    await outputchannel.send(embed =done)
+                    return
+
+                elif msgid not in list3:
+                    await outputchannel.send(embed =notfound)
+                    return
+            
+            elif messages1 ==[]:
+                await outputchannel.send(embed =notfound)
+
+    
     else:
         await ctx.message.delete()
         user = bot.get_user(ctx.author.id)
-        embed=discord.Embed(title="Ticket raised ", description="hello **{0}** . please raise your ticket in **{1}**  channel".format(user.mention,ch.mention),color=0xff00f6)
+        embed=discord.Embed(title="Ticket not raised ", description="hello **{0}** . please raise your ticket in **{1}**  channel".format(user.mention,ch.mention),color=0xff00f6)
         await ctx.send(embed=embed)
 
 
 
 @tickstatus.error
-async def tickstatus_error(ctx, error):
-   print("fuck",error)
-   if isinstance(error,HTTPException):
-       print("hello")
-       #await ctx.send("**{}** ,You don't have permission to do that!".format(ctx.message.author))
+async def tickstatus_error(ctx,error):
+    ctx.message.delete()
+    print("fuck",error)
+    if str(type(error))== "<class 'discord.ext.commands.errors.CommandInvokeError'>":
+        await ctx.send("**{}** ,You have entered invalid Ticket ID!".format(ctx.message.author))
+
+
+    
 
 
 ################# END ###########################################
@@ -351,9 +431,9 @@ async def tickstatus_error(ctx, error):
 
 # bot.run(bot.config['token']) #for local
 
-bot.run(bot.config['token'])
+# bot.run(bot.config['token'])
 
-# bot.run(os.environ['token']) ##for hosting
+bot.run(os.environ['token']) ##for hosting
 
 
 
