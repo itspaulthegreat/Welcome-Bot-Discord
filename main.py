@@ -200,11 +200,22 @@ async def on_member_join(member):
        
     elif member.bot == False:
         
+        
         await member.send("Welcome!We hope you have a great day here.")
         channel = bot.get_channel(808012829285154886)
-        
-       
-        await channel.send(f"EveryOne Please welcome {member.mention}. We hope you have a great day here.")
+        m= member.id
+        c = member.avatar
+        avatar = str(member.avatar_url).split('?')
+        pfp = avatar[0] + "?size=1024"
+        rolech = bot.get_channel(809339141791809568)
+        ticketch = bot.get_channel(809356256112017408)
+        rulech = bot.get_channel(807121650389876776)
+        print("pfp",pfp)
+        embed=discord.Embed(title="WELCOME To DevCord", description="**EveryOne Please welcome** **{0}**  \n\n **Please get your roles from** **{1}**.\n **And if you have issues raise a ticket by using ~ticket yourreason in** **{2}**. \n\n Read the rulebook an react to it {3}".format(member.mention,rolech.mention,ticketch.mention,rulech.mention) , color=0xecce8b)
+        embed.set_thumbnail(url=(pfp))
+        embed.set_footer(text="Please follow our rules as mentioned in the rulebook.Breaking of any  guidlines can result in against the defaulter.")
+
+        await channel.send(embed=embed)
         role = get(member.guild.roles, name="Members")
         await member.add_roles(role)
         
@@ -444,6 +455,55 @@ async def tickstatus_error(ctx,error):
 
 
 ################# END ###########################################
+
+
+
+
+
+
+
+
+########################## channel creation #####################
+
+
+
+@bot.command(name="creatch")
+@has_permissions(administrator=True)
+async def createch(ctx,*,arg):
+    if ctx.message.channel.id == 807120796051832865:
+        guild = bot.get_guild(807120796051832862)
+        catid = await guild.create_category(arg)
+
+        await guild.create_text_channel("📃-info",overwrites=None,category=catid,reason = None)
+        await guild.create_text_channel("💬-discussion",overwrites=None,category=catid,reason = None)
+        await guild.create_text_channel("🏆-project-showcase",overwrites=None,category=catid,reason = None)
+        await guild.create_text_channel("📚-resources",overwrites=None,category=catid,reason = None)
+        await guild.create_text_channel("❔-questions",overwrites=None,category=catid,reason = None)
+        await guild.create_voice_channel("📞-voice",overwrites=None,category=catid,reason = None)
+ 
+    else:
+        await ctx.message.delete()
+
+
+
+########################## the end #################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
