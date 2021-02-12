@@ -201,7 +201,7 @@ async def on_member_join(member):
     elif member.bot == False:
         
         
-        await member.send("Welcome!We hope you have a great day here.")
+        
         channel = bot.get_channel(808012829285154886)
         m= member.id
         c = member.avatar
@@ -218,7 +218,7 @@ async def on_member_join(member):
         await channel.send(embed=embed)
         role = get(member.guild.roles, name="Members")
         await member.add_roles(role)
-        
+        await member.send("Welcome!We hope you have a great day here.")
         
 
    
