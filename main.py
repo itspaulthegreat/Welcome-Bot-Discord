@@ -377,7 +377,7 @@ async def gethelp(ctx):
 
 
 @bot.command(name='ticket')    #ticker raise
-async def on_message(ctx,*,arg):
+async def on_messae(ctx,*,arg):
     await ctx.message.delete()
     ch = bot.get_channel(809356256112017408)
     if ctx.message.channel.id == 809356256112017408:
@@ -572,6 +572,23 @@ async def createch(ctx,*,arg):
 
 
 
+####################add reaction to messages by admin############################
+
+@bot.event
+async def on_message(msg):
+    flag = 0
+    guild = bot.get_guild(807120796051832862)
+    async for kk in msg.guild.fetch_members(limit=None):
+            if msg.author.id == kk.id:
+                print(kk.roles[-1])
+                if str(kk.roles[-1]) == "Moderator" or str(kk.roles[-1]) == "Administrator" or str(kk.roles[-1]) == "DevCord (ModBot)":
+                    emoji = '💕'
+                    emoji2 = '🤟'
+                    emoji3 = '😍'
+                    await msg.add_reaction(emoji)
+                    await msg.add_reaction(emoji2)
+                    await msg.add_reaction(emoji3)
+    await bot.process_commands(msg)
 
 
 
@@ -586,11 +603,13 @@ async def createch(ctx,*,arg):
 
 
 
-bot.run(bot.config['token']) #for local
+
+
+# bot.run(bot.config['token']) #for local
 
 # bot.run(bot.config['token'])
 
-# bot.run(os.environ['token']) ##for hosting
+bot.run(os.environ['token']) ##for hosting
 
 
 
