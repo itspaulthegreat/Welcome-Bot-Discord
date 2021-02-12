@@ -256,26 +256,105 @@ async def on_member_remove(member):
 # async def serverstats(ctx):
     
 
-@bot.command(name='helpticket')    #ticker raise
-@has_permissions(administrator= True)
-async def gethelpticket(ctx):
-    ch = bot.get_channel(809356256112017408)
-    if ctx.message.channel.id == 809356256112017408 or ctx.message.channel.id == 809371578172440607:
-        await ctx.message.delete()
-        if ctx.message.channel.id == 809371578172440607:
-            
-            embed=discord.Embed(title="Ticket status Help", description="**Hello Users ** \n To know the status of your Ticket please use this channel only \n  Ticket status can be seen by using  **~tickstatus ticketnumber** command. \n Type your ticket number after the command .",color=0xff00f6)
-            await ctx.send(embed=embed)
+@bot.command(name='helpme')    #helps
+async def gethelp(ctx):
+    flag =0
+    async for kk in ctx.guild.fetch_members(limit=None):
+            if ctx.message.author.id == kk.id:
+                print(kk.roles[-1])
+                if str(kk.roles[-1]) == "Moderator" or str(kk.roles[-1]) == "Administrator":
+                    flag = 1
+    # if "Administrator" == str(ctx.message.author.roles[-1]) or "Moderator" == str(ctx.message.author.roles[-1]):
+    #     print("done")
+    guild = bot.get_guild(807120796051832862)
+    await ctx.message.delete()
+    info_channel = ['💬-discussion', '🏆-project-showcase', '📚-resources','❔-questions']
+    normal_text = ['no-mic','introductions','spam-here','off-topic-discussions']
+    for ch in info_channel:
+        if str(discord.utils.get(guild.text_channels, name=ch)) == str(ctx.message.channel.name):
+            embed=discord.Embed(title="Specialization Corner", description="This is Specialization Corner. Use it for the the specific specilization",color=0xff00f6)
+            mes = await ctx.send(embed=embed)
+            await asyncio.sleep(5)
+            await mes.delete()
+            return
+        
+    for ch in normal_text:
+        discord.utils.get(guild.text_channels, name=ch)
+        if str(discord.utils.get(guild.text_channels, name=ch)) == str(ctx.message.channel.name):
+            embed=discord.Embed(title="Normal Text Channel", description="This a normal text channel \n Type Whatever you want. \n No NSFW though !!!",color=0xff00f6)
+            mes = await ctx.send(embed=embed)
+            await asyncio.sleep(5)
+            await mes.delete()
+            return
+    
 
-        elif ctx.message.channel.id == 809356256112017408:
-                role = discord.utils.get(ctx.guild.roles, name='Moderator')
-                embed=discord.Embed(title="Ticket raising Help", description="**Hello Users ** \n To generate a new Ticket please use this channel only \n A new ticket can be raised by using  **~ticket reason** command. \n Type your reason after the command . \n As soon as a ticket has been raised a **{}** will resolve the issue. An example is shown below by an admin.".format(role.mention),color=0xff00f6)
-                await ctx.send(embed=embed)
+    
+    if ctx.message.channel.id == 809371578172440607:  #raise ticket channel
+        
+        embed=discord.Embed(title="Ticket status Help", description="**Hello Users ** \n To know the status of your Ticket please use this channel only \n  Ticket status can be seen by using  **~tickstatus ticketnumber** command. \n Type your ticket number after the command .",color=0xff00f6)
+        mes = await ctx.send(embed=embed)
+        if flag == 0:
+                await asyncio.sleep(5)
+                await mes.delete()
+
+    elif ctx.message.channel.id == 809356256112017408:   #ticket status channel
+            role = discord.utils.get(ctx.guild.roles, name='Moderator')
+            embed=discord.Embed(title="Ticket raising Help", description="**Hello Users ** \n To generate a new Ticket please use this channel only \n A new ticket can be raised by using  **~ticket reason** command. \n Type your reason after the command . \n As soon as a ticket has been raised a **{}** will resolve the issue. An example is shown below by an admin.".format(role.mention),color=0xff00f6)
+            mes = await ctx.send(embed=embed)
+            if flag == 0:
+                await asyncio.sleep(5)
+                await mes.delete()
+    
+    elif ctx.message.channel.id == 809339141791809568:   #role channel
+            role = discord.utils.get(ctx.guild.roles, name='Moderator')
+            embed=discord.Embed(title="How to get Roles", description="**Hello Users ** \n To get Role use this channel \n Use the following command **>gr** to get the roles. \n **A embed will come up . Type 1 or 2 or the respect number for the respected role**  \n\n. Incase of help ask **{}**  . They will resolve the issue.".format(role.mention),color=0xff00f6)
+            mes = await ctx.send(embed=embed)
+            if flag == 0:
+                await asyncio.sleep(5)
+                await mes.delete()
+
+    elif ctx.message.channel.id == 807121650389876776:   #Rulebook
+            
+            desc = '''General Server Rules :white_check_mark: 
+                    \n Violation of the Rules, may result in getting banned or kicked.
+                    \n1. Be good to each other, don't keep any intention to hurt others.
+                    \n2. Don't be Toxic
+                    \n3. Respect all members.
+                    \n4. In case of conflict Admin's decision in final.
+                    \n5. Don't Promote or Advertise in our Server. No Server Promotion.
+                    \n6. No DM Promotion. 
+                    \n7. No Doxing. 
+
+                    \n\nChat Rules :white_check_mark: 
+                    \n1. No Religious or Racist Comments.
+                    \n2. Don't use extreme Slangs.
+                    \n3. No NSFW content in non-NSFW Channel.
+                    \n4. No Spamming.
+                    \n5. Post appropriate content in appropriate channels.
+                    \n6. No Nudity or Pornography.
+
+                    \n\nVoice Channel Rules :white_check_mark:
+                    \n1. You must utilize the Voice Channels (VC) for the right purpose of their creation.
+                    \n2. You must not call the @music-bots in the Gaming or Non-music VCs to disturb others. However you can listen to music in a non-music channel if others in the VC agree.
+                    \n3. You must not use verbal abuse against anyone. Or hurt anyone's sentiments. 
+                    \n4. Don't Occupy a VC if you are not talking.
+                    '''
+            print(flag)
+
+            embed=discord.Embed(title="DevCord Rulebook", description=desc,color=0xff00f6)
+            mes = await ctx.send(embed=embed)
+            if flag == 0:
+                await asyncio.sleep(5)
+                await mes.delete()
+
+
+
     else:
-        await ctx.message.delete()
-        user = bot.get_user(ctx.author.id)
-        embed=discord.Embed(title="Wrong channel ", description="hello **{0}** . please raise your ticket in **{1}**  channel".format(user.mention,ch.mention),color=0xff00f6)
-        await ctx.send(embed=embed)
+        print("hi")
+        embed=discord.Embed(title="Wrong channel ", description="hello {} no help available for this channel".format(ctx.message.author.mention),color=0xff00f6)
+        mes = await ctx.send(embed=embed)
+        await asyncio.sleep(5)
+        await mes.delete()
 
 
 
@@ -507,11 +586,11 @@ async def createch(ctx,*,arg):
 
 
 
-# bot.run(bot.config['token']) #for local
+bot.run(bot.config['token']) #for local
 
 # bot.run(bot.config['token'])
 
-bot.run(os.environ['token']) ##for hosting
+# bot.run(os.environ['token']) ##for hosting
 
 
 
