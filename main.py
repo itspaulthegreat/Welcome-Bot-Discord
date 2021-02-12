@@ -17,9 +17,9 @@ intents.members = True
 # bot = discord.bot(intents=intents)
 bot = commands.Bot(command_prefix='~', description="I am DevCord",intents=intents,case_insensitive = True)
 
-# with open('config.json') as fh:
-#     bot.config = json.load(fh)
-#     #bot.run(bot.config['token'])
+with open('config.json') as fh:
+    bot.config = json.load(fh)
+    #bot.run(bot.config['token'])
 
 
 
@@ -253,7 +253,7 @@ async def gethelpticket(ctx):
         await ctx.message.delete()
         if ctx.message.channel.id == 809371578172440607:
             
-            embed=discord.Embed(title="Ticket status Help", description="**Hello Users ** \n To know the status of your Ticket please use this channel only \n  Ticket status can be seen by using  **~ticstatus ticketnumber** command. \n Type your ticket number after the command .",color=0xff00f6)
+            embed=discord.Embed(title="Ticket status Help", description="**Hello Users ** \n To know the status of your Ticket please use this channel only \n  Ticket status can be seen by using  **~tickstatus ticketnumber** command. \n Type your ticket number after the command .",color=0xff00f6)
             await ctx.send(embed=embed)
 
         elif ctx.message.channel.id == 809356256112017408:
@@ -449,9 +449,9 @@ async def tickstatus_error(ctx,error):
 
 # bot.run(bot.config['token']) #for local
 
-# bot.run(bot.config['token'])
+bot.run(bot.config['token'])
 
-bot.run(os.environ['token']) ##for hosting
+# bot.run(os.environ['token']) ##for hosting
 
 
 
