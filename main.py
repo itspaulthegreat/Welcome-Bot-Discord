@@ -17,9 +17,9 @@ intents.members = True
 # bot = discord.bot(intents=intents)
 bot = commands.Bot(command_prefix='~', description="I am DevCord",intents=intents,case_insensitive = True)
 
-# with open('config.json') as fh:
-#     bot.config = json.load(fh)
-#     #bot.run(bot.config['token'])
+with open('config.json') as fh:
+    bot.config = json.load(fh)
+    #bot.run(bot.config['token'])
 
 
 
@@ -576,19 +576,24 @@ async def createch(ctx,*,arg):
 
 @bot.event
 async def on_message(msg):
-    flag = 0
-    guild = bot.get_guild(807120796051832862)
-    async for kk in msg.guild.fetch_members(limit=None):
-            if msg.author.id == kk.id:
-                print(kk.roles[-1])
-                if str(kk.roles[-1]) == "Moderator" or str(kk.roles[-1]) == "Administrator" or str(kk.roles[-1]) == "DevCord (ModBot)":
-                    emoji = '💕'
-                    emoji2 = '🤟'
-                    emoji3 = '😍'
-                    await msg.add_reaction(emoji)
-                    await msg.add_reaction(emoji2)
-                    await msg.add_reaction(emoji3)
-    await bot.process_commands(msg)
+    channelid = [808094758244581438,809356256112017408,809370568297545759,809371595051237416,809371578172440607,808012829285154886]
+    if msg.channel.id not in channelid:
+        flag = 0
+        guild = bot.get_guild(807120796051832862)
+        async for kk in msg.guild.fetch_members(limit=None):
+                if msg.author.id == kk.id:
+                    print(kk.roles[-1])
+                    if str(kk.roles[-1]) == "Moderator" or str(kk.roles[-1]) == "Administrator" or str(kk.roles[-1]) == "DevCord (ModBot)":
+                        emoji = '💕'
+                        emoji2 = '🤟'
+                        emoji3 = '😍'
+                        await msg.add_reaction(emoji)
+                        await msg.add_reaction(emoji2)
+                        await msg.add_reaction(emoji3)
+        await bot.process_commands(msg)
+
+    else:
+        return
 
 
 
@@ -607,9 +612,9 @@ async def on_message(msg):
 
 # bot.run(bot.config['token']) #for local
 
-# bot.run(bot.config['token'])
+bot.run(bot.config['token'])
 
-bot.run(os.environ['token']) ##for hosting
+# bot.run(os.environ['token']) ##for hosting
 
 
 
