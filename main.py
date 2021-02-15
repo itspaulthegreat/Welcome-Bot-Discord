@@ -17,9 +17,9 @@ intents.members = True
 # bot = discord.bot(intents=intents)
 bot = commands.Bot(command_prefix='~', description="I am DevCord",intents=intents,case_insensitive = True)
 
-# with open('config.json') as fh:
-#     bot.config = json.load(fh)
-#     #bot.run(bot.config['token'])
+with open('config.json') as fh:
+    bot.config = json.load(fh)
+    #bot.run(bot.config['token'])
 
 
 
@@ -379,9 +379,10 @@ async def gethelp(ctx):
 
 @bot.command(name='ticket')    #ticker raise
 async def on_messae(ctx,*,arg):
-    await ctx.message.delete()
+    print("inside ticket raise")
     ch = bot.get_channel(809356256112017408)
     if ctx.message.channel.id == 809356256112017408:
+        await ctx.message.delete()
         user = bot.get_user(ctx.author.id)
         role = discord.utils.get(ctx.guild.roles, name='Moderator')
         embed=discord.Embed(title="Ticket raised", description="**Hello {0}** A new ticket has been raised by **{1}** . \n **Issue** : **{2}**. \n Thank you.".format(role.mention,user.mention, arg),color=0xff00f6)
@@ -393,10 +394,17 @@ async def on_messae(ctx,*,arg):
         await allticketmsg.edit(embed = newembedallticket)
         await raisedmsg.edit(embed = newembedraisedticket)
     else:
+        print("hi1",type(ctx))
         await ctx.message.delete()
+        print("hi2")
         user = bot.get_user(ctx.author.id)
+        print("hi3")
         embed=discord.Embed(title="Ticket not raised ", description="hello **{0}** . please raise your ticket in **{1}**  channel".format(user.mention,ch.mention),color=0xff00f6)
+        print("hi4")
         await ctx.send(embed=embed)
+        print("hi5")
+
+
 
 
 @bot.command(name='tickresol')    #ticker raise
@@ -416,6 +424,7 @@ async def resolve(ctx,msgid):
     else:
         await ctx.message.delete()
         user = bot.get_user(ctx.author.id)
+        pri
         embed=discord.Embed(title="Ticket not raised ", description="hello **{0}** . please raise your ticket in **{1}**  channel".format(user.mention,ch.mention),color=0xff00f6)
         await ctx.send(embed=embed)
 
@@ -575,38 +584,38 @@ async def createch(ctx,*,arg):
 
 ####################add reaction to messages by admin############################
 
-@bot.event
-async def on_message(msg):
-    channelid = [808094758244581438,809356256112017408,809370568297545759,809371595051237416,809371578172440607,808012829285154886]
-    if msg.channel.id == 809339889010999347:
-        emoji = '💕'
-        emoji2 = '🤟'
-        emoji3 = '😍'
-        await msg.add_reaction(emoji)
-        await msg.add_reaction(emoji2)
-        await msg.add_reaction(emoji3)
-        return
-    elif msg.channel.id not in channelid:
-        flag = 0
-        guild = bot.get_guild(807120796051832862)
-        async for kk in msg.guild.fetch_members(limit=None):
-                if msg.author.id == kk.id:
-                    print(kk.roles[-1])
-                    if str(kk.roles[-1]) == "Moderator" or str(kk.roles[-1]) == "Administrator" or str(kk.roles[-1]) == "DevCord (ModBot)":
-                        emoji = '💕'
-                        emoji2 = '🤟'
-                        emoji3 = '😍'
-                        await msg.add_reaction(emoji)
-                        await msg.add_reaction(emoji2)
-                        await msg.add_reaction(emoji3)
-        await bot.process_commands(msg)
-        return
+# @bot.event
+# async def on_message(msg):
+#     channelid = [808094758244581438,809356256112017408,809370568297545759,809371595051237416,809371578172440607,808012829285154886]
+#     if msg.channel.id == 809339889010999347:
+#         emoji = '💕'
+#         emoji2 = '🤟'
+#         emoji3 = '😍'
+#         await msg.add_reaction(emoji)
+#         await msg.add_reaction(emoji2)
+#         await msg.add_reaction(emoji3)
+#         return
+# #     elif msg.channel.id not in channelid:
+# #         flag = 0
+# #         guild = bot.get_guild(807120796051832862)
+# #         async for kk in msg.guild.fetch_members(limit=None):
+# #                 if msg.author.id == kk.id:
+# #                     print(kk.roles[-1])
+# #                     if str(kk.roles[-1]) == "Moderator" or str(kk.roles[-1]) == "Administrator" or str(kk.roles[-1]) == "DevCord (ModBot)":
+# #                         emoji = '💕'
+# #                         emoji2 = '🤟'
+# #                         emoji3 = '😍'
+# #                         await msg.add_reaction(emoji)
+# #                         await msg.add_reaction(emoji2)
+# #                         await msg.add_reaction(emoji3)
+# #         await bot.process_commands(msg)
+# #         return
     
  
 
 
-    else:
-        return
+#     else:
+#         return
 
 
 
@@ -625,9 +634,9 @@ async def on_message(msg):
 
 # bot.run(bot.config['token']) #for local
 
-# bot.run(bot.config['token'])
+bot.run(bot.config['token'])
 
-bot.run(os.environ['token']) ##for hosting
+# bot.run(os.environ['token']) ##for hosting
 
 
 
