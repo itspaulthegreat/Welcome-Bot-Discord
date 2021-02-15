@@ -164,6 +164,7 @@ async def move_error(ctx, error):
 
 
 @bot.command(name="clear")  #clearing
+@has_permissions(administrator=True)
 async def clear(ctx,arg):
     await ctx.channel.purge(limit=int(arg))
 
