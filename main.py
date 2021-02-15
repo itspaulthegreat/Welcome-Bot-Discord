@@ -17,9 +17,9 @@ intents.members = True
 # bot = discord.bot(intents=intents)
 bot = commands.Bot(command_prefix='~', description="I am DevCord",intents=intents,case_insensitive = True)
 
-# with open('config.json') as fh:
-#     bot.config = json.load(fh)
-#     #bot.run(bot.config['token'])
+with open('config.json') as fh:
+    bot.config = json.load(fh)
+    #bot.run(bot.config['token'])
 
 
 
@@ -211,14 +211,14 @@ async def on_member_join(member):
         ticketch = bot.get_channel(809356256112017408)
         rulech = bot.get_channel(807121650389876776)
         print("pfp",pfp)
-        embed=discord.Embed(title="WELCOME To DevCord", description="**EveryOne Please welcome** **{0}**  \n\n **Please get your roles from** **{1}**.\n **And if you have issues raise a ticket by using ~ticket yourreason in** **{2}**. \n\n Read the rulebook an react to it {3}".format(member.mention,rolech.mention,ticketch.mention,rulech.mention) , color=0xecce8b)
+        embed=discord.Embed(title="WELCOME To DevCord", description="Hello! **{0}** \n\n **Please get your roles from** **{1}**.\n **And if you have issues raise a ticket by using ~ticket yourreason in** **{2}**. \n\n Read the rulebook an react to it {3}".format(member.mention,rolech.mention,ticketch.mention,rulech.mention) , color=0xecce8b)
         embed.set_thumbnail(url=(pfp))
         embed.set_footer(text="Please follow our rules as mentioned in the rulebook.Breaking of any  guidlines can result in against the defaulter.")
 
         await channel.send(embed=embed)
         role = get(member.guild.roles, name="Members")
         await member.add_roles(role)
-        await member.send("Welcome!We hope you have a great day here.")
+        await member.send(embed=embed)
         
 
    
@@ -269,7 +269,7 @@ async def gethelp(ctx):
     guild = bot.get_guild(807120796051832862)
     await ctx.message.delete()
     info_channel = ['💬-discussion', '🏆-project-showcase', '📚-resources','❔-questions']
-    normal_text = ['no-mic','introductions','spam-here','off-topic-discussions']
+    normal_text = ['🔇💬no-mic','👨🔬introductions','🗑spam-here','💬off-topic-discussion']
     for ch in info_channel:
         if str(discord.utils.get(guild.text_channels, name=ch)) == str(ctx.message.channel.name):
             embed=discord.Embed(title="Specialization Corner", description="This is Specialization Corner. Use it for the the specific specilization",color=0xff00f6)
@@ -607,9 +607,9 @@ async def on_message(msg):
 
 # bot.run(bot.config['token']) #for local
 
-# bot.run(bot.config['token'])
+bot.run(bot.config['token'])
 
-bot.run(os.environ['token']) ##for hosting
+# bot.run(os.environ['token']) ##for hosting
 
 
 
