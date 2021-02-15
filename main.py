@@ -577,7 +577,15 @@ async def createch(ctx,*,arg):
 @bot.event
 async def on_message(msg):
     channelid = [808094758244581438,809356256112017408,809370568297545759,809371595051237416,809371578172440607,808012829285154886]
-    if msg.channel.id not in channelid:
+    if msg.channel.id == 809339889010999347:
+        emoji = '💕'
+        emoji2 = '🤟'
+        emoji3 = '😍'
+        await msg.add_reaction(emoji)
+        await msg.add_reaction(emoji2)
+        await msg.add_reaction(emoji3)
+        return
+    elif msg.channel.id not in channelid:
         flag = 0
         guild = bot.get_guild(807120796051832862)
         async for kk in msg.guild.fetch_members(limit=None):
@@ -591,6 +599,10 @@ async def on_message(msg):
                         await msg.add_reaction(emoji2)
                         await msg.add_reaction(emoji3)
         await bot.process_commands(msg)
+        return
+    
+ 
+
 
     else:
         return
