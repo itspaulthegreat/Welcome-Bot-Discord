@@ -17,9 +17,9 @@ intents.members = True
 # bot = discord.bot(intents=intents)
 bot = commands.Bot(command_prefix='~', description="I am DevCord",intents=intents,case_insensitive = True)
 
-with open('config.json') as fh:
-    bot.config = json.load(fh)
-    #bot.run(bot.config['token'])
+# with open('config.json') as fh:
+#     bot.config = json.load(fh)
+#     #bot.run(bot.config['token'])
 
 
 
@@ -634,9 +634,9 @@ async def createch(ctx,*,arg):
 
 # bot.run(bot.config['token']) #for local
 
-bot.run(bot.config['token'])
+# bot.run(bot.config['token'])
 
-# bot.run(os.environ['token']) ##for hosting
+bot.run(os.environ['token']) ##for hosting
 
 
 
